@@ -1,0 +1,11 @@
+{
+  "title": "Standard Menu",
+  "items": [
+    {
+      "description": "Normal pizza dude.",
+      "pizzaType":  "StandardPizza",
+      "price": 10.00,
+      "soldOut":  false
+    }
+  ]
+}
