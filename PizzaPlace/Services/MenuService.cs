@@ -24,16 +24,16 @@ public class MenuService : IMenuService
         ComparableList<MenuItem> list = new ComparableList<MenuItem>();
 
         // Make the items that are always for sale and add them to the list
-        list.Add(new MenuItem("Pepperoni Pizza.", Models.Types.PizzaRecipeType.StandardPizza, 10.99));
-        list.Add(new MenuItem("Mario Pizza.", Models.Types.PizzaRecipeType.StandardPizza, 9.99));
-        list.Add(new MenuItem("Luigi Pizza.", Models.Types.PizzaRecipeType.StandardPizza, 9.99));
-        list.Add(new MenuItem("Wario Pizza.", Models.Types.PizzaRecipeType.OddPizza, 8.99));
-        list.Add(new MenuItem("Waluigi Pizza.", Models.Types.PizzaRecipeType.OddPizza, 10.99));
-        list.Add(new MenuItem("Peach Pizza.", Models.Types.PizzaRecipeType.ExtremelyTastyPizza, 12.99));
-        list.Add(new MenuItem("Daisy Pizza.", Models.Types.PizzaRecipeType.ExtremelyTastyPizza, 12.99));
-        list.Add(new MenuItem("Yoshi Pizza.", Models.Types.PizzaRecipeType.ExtremelyTastyPizza, 12.99));
-        list.Add(new MenuItem("Mushroom Pizza.", Models.Types.PizzaRecipeType.StandardPizza, 10.99));
-        list.Add(new MenuItem("Bowser Pizza.", Models.Types.PizzaRecipeType.RarePizza, 15.99));
+        list.Add(new MenuItem("Pepperoni Pizza", Models.Types.PizzaRecipeType.StandardPizza, 10.99));
+        list.Add(new MenuItem("Mario Pizza", Models.Types.PizzaRecipeType.StandardPizza, 9.99));
+        list.Add(new MenuItem("Luigi Pizza", Models.Types.PizzaRecipeType.StandardPizza, 9.99));
+        list.Add(new MenuItem("Wario Pizza", Models.Types.PizzaRecipeType.OddPizza, 8.99));
+        list.Add(new MenuItem("Waluigi Pizza", Models.Types.PizzaRecipeType.OddPizza, 10.99));
+        list.Add(new MenuItem("Peach Pizza", Models.Types.PizzaRecipeType.ExtremelyTastyPizza, 12.99));
+        list.Add(new MenuItem("Daisy Pizza", Models.Types.PizzaRecipeType.ExtremelyTastyPizza, 12.99));
+        list.Add(new MenuItem("Yoshi Pizza", Models.Types.PizzaRecipeType.ExtremelyTastyPizza, 12.99));
+        list.Add(new MenuItem("Mushroom Pizza", Models.Types.PizzaRecipeType.StandardPizza, 10.99));
+        list.Add(new MenuItem("Bowser Pizza", Models.Types.PizzaRecipeType.RarePizza, 15.99));
 
         // Depending on whether it's lunch time, add more pizzas
         if (isLunchTime)
@@ -44,7 +44,7 @@ public class MenuService : IMenuService
         else
         {
             list.Add(new MenuItem("Shy Guy Pizza", Models.Types.PizzaRecipeType.OddPizza, 9.99));
-            list.Add(new MenuItem("Bowser Junior Pizza", Models.Types.PizzaRecipeType.ChildPizza, 7.99));
+            list.Add(new MenuItem("Bowser Jr Pizza", Models.Types.PizzaRecipeType.ChildPizza, 7.99));
         }
 
         return list;
