@@ -13,12 +13,15 @@ namespace PizzaPlace.Test.Services;
 public class MenuServiceTests
 {
     [TestMethod]
-    public void GetMenu_GivesLunchMenuAtLunchtime()
+    [DataRow(2026, 3, 16, 12, 12, 12)]
+    [DataRow(2026, 3, 16, 11, 00, 00)]
+    [DataRow(2026, 3, 16, 13, 59, 59)]
+    public void GetMenu_GivesLunchMenuAtLunchtime(int year, int month, int day, int hour, int minute, int second)
     {
         // Arrange
         MenuService menuService = new MenuService();
 
-        DateTimeOffset lunchTime = new DateTimeOffset(new DateTime(2026, 3, 16, 12, 12, 12));
+        DateTimeOffset lunchTime = new DateTimeOffset(new DateTime(year, month, day, hour, minute, second));
 
         // Act
         Menu menu = menuService.GetMenu(lunchTime);
@@ -31,15 +34,18 @@ public class MenuServiceTests
     }
 
     [TestMethod]
-    public void GetMenu_GivesStandardMenuOutsideLunchtime()
+    [DataRow(2026, 3, 16, 14, 12, 12)]
+    [DataRow(2026, 3, 16, 10, 59, 59)]
+    [DataRow(2026, 3, 16, 23, 12, 12)]
+    public void GetMenu_GivesStandardMenuOutsideLunchtime(int year, int month, int day, int hour, int minute, int second)
     {
         // Arrange
         MenuService menuService = new MenuService();
 
-        DateTimeOffset pastLunchTime = new DateTimeOffset(new DateTime(2026, 3, 16, 14, 12, 12));
+        DateTimeOffset notLunchTime = new DateTimeOffset(new DateTime(year, month, day, hour, minute, second));
 
         // Act
-        Menu menu = menuService.GetMenu(pastLunchTime);
+        Menu menu = menuService.GetMenu(notLunchTime);
 
         // Assert
         Assert.AreEqual("Standard Menu", menu.Title);
