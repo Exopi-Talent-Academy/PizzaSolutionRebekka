@@ -37,5 +37,6 @@ public class RecipeServiceTests
 
         // Assert
         Assert.AreEqual(expected, actual);
+        //recipeRepository.VerifyAll(); // this line was in the guide but was missing here
     }
 }
