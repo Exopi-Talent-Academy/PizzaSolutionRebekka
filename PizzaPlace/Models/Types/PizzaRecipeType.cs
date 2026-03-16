@@ -9,4 +9,5 @@ public enum PizzaRecipeType
     RarePizza,
     HorseRadishPizza,
     EmptyPizza,
+    ChildPizza
 }
