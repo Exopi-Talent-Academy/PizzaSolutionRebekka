@@ -12,10 +12,15 @@ public class StockServiceTests
     private static StockService GetService(Mock<IStockRepository> stockRepository) =>
         new(stockRepository.Object);
 
+    private StockDto recipeStock1 = new StockDto(StockType.UnicornDust, 1);
+    private StockDto recipeStock2 = new StockDto(StockType.Sulphur, 10);
+    private StockDto mockStock1 = new StockDto(StockType.UnicornDust, 10);
+    private StockDto mockStock2 = new StockDto(StockType.Sulphur, 10);
+
     [TestMethod]
-    [DataRow(1, 2, 20)]
-    [DataRow(5, 1, 6)]
-    [DataRow(5, 2, 4)]
+    [DataRow(1, 2, 20)] // Checks that it works when pizzas of different types exceed the stock
+    [DataRow(5, 1, 6)]  // Checks that it works when there are two pizzas of the same type that separately don't exceed the stock, but do in combination
+    [DataRow(5, 2, 4)]  // Checks that it works when just one exceeds
     public async Task HasInsufficentStock_ReturnsTrueWhenInsufficient(int orderAmount1, int orderAmount2, int orderAmount3)
     {
         // Arrange : Make the order and recipes
@@ -25,24 +30,11 @@ public class StockServiceTests
             new PizzaAmount(PizzaRecipeType.RarePizza, (ushort)orderAmount3)
         ]);
 
-        StockDto recipeStock1 = new StockDto(StockType.UnicornDust, 1);
-        StockDto recipeStock2 = new StockDto(StockType.Sulphur, 10);
-        var rareRecipe = new PizzaRecipeDto(PizzaRecipeType.RarePizza, [recipeStock1], 1);
-        var oddRecipe = new PizzaRecipeDto(PizzaRecipeType.OddPizza, [recipeStock2], 100);
-        ComparableList<PizzaRecipeDto> recipeList = [rareRecipe, oddRecipe];
+        ComparableList<PizzaRecipeDto> recipeList = [new PizzaRecipeDto(PizzaRecipeType.RarePizza, [recipeStock1], 1), 
+                                                     new PizzaRecipeDto(PizzaRecipeType.OddPizza, [recipeStock2], 100)];
 
-        // Arrange : Make the mock recipe repository with recipes
-        var recipeRepository = new Mock<IRecipeRepository>(MockBehavior.Strict);
-        recipeRepository.Setup(x => x.GetRecipe(PizzaRecipeType.RarePizza))
-            .ReturnsAsync(rareRecipe);
-        recipeRepository.Setup(x => x.GetRecipe(PizzaRecipeType.OddPizza))
-            .ReturnsAsync(oddRecipe);
-
-        // Arrange : Make the mock stock repository with the stock
+        // Arrange : Make the mock stock repository
         var stockRepository = new Mock<IStockRepository>(MockBehavior.Strict);
-
-        StockDto mockStock1 = new StockDto(StockType.UnicornDust, 10);
-        StockDto mockStock2 = new StockDto(StockType.Sulphur, 10);
 
         stockRepository.Setup(x => x.GetStock(recipeStock1.StockType))
             .ReturnsAsync(mockStock1);
@@ -59,9 +51,9 @@ public class StockServiceTests
     }
 
     [TestMethod]
-    [DataRow(2, 1, 4)]
-    [DataRow(5, 1, 5)]
-    [DataRow(9, 1, 1)]
+    [DataRow(2, 1, 4)] // Checks that it works when hitting the exact amount in the stock for one
+    [DataRow(5, 1, 5)] // Checks that it works when hitting the exact amount in the stock for two
+    [DataRow(1, 1, 1)] // Basic test case
     public async Task HasInsufficentStock_ReturnsFalseWhenSufficient(int orderAmount1, int orderAmount2, int orderAmount3)
     {
         // Arrange : Make the order and recipes
@@ -71,24 +63,11 @@ public class StockServiceTests
             new PizzaAmount(PizzaRecipeType.RarePizza, (ushort)orderAmount3)
         ]);
 
-        StockDto recipeStock1 = new StockDto(StockType.UnicornDust, 1);
-        StockDto recipeStock2 = new StockDto(StockType.Sulphur, 10);
-        var rareRecipe = new PizzaRecipeDto(PizzaRecipeType.RarePizza, [recipeStock1], 1);
-        var oddRecipe = new PizzaRecipeDto(PizzaRecipeType.OddPizza, [recipeStock2], 100);
-        ComparableList<PizzaRecipeDto> recipeList = [rareRecipe, oddRecipe];
+        ComparableList<PizzaRecipeDto> recipeList = [new PizzaRecipeDto(PizzaRecipeType.RarePizza, [recipeStock1], 1), 
+                                                     new PizzaRecipeDto(PizzaRecipeType.OddPizza, [recipeStock2], 100)];
 
-        // Arrange : Make the mock recipe repository with recipes
-        var recipeRepository = new Mock<IRecipeRepository>(MockBehavior.Strict);
-        recipeRepository.Setup(x => x.GetRecipe(PizzaRecipeType.RarePizza))
-            .ReturnsAsync(rareRecipe);
-        recipeRepository.Setup(x => x.GetRecipe(PizzaRecipeType.OddPizza))
-            .ReturnsAsync(oddRecipe);
-
-        // Arrange : Make the mock stock repository with the stock
+        // Arrange : Make the mock stock repository
         var stockRepository = new Mock<IStockRepository>(MockBehavior.Strict);
-
-        StockDto mockStock1 = new StockDto(StockType.UnicornDust, 10);
-        StockDto mockStock2 = new StockDto(StockType.Sulphur, 10);
 
         stockRepository.Setup(x => x.GetStock(recipeStock1.StockType))
             .ReturnsAsync(mockStock1);
@@ -105,9 +84,9 @@ public class StockServiceTests
     }
 
     [TestMethod]
-    [DataRow(1, 1, 5)]
-    [DataRow(5, 1, 5)]
-    [DataRow(4, 1, 3)]
+    [DataRow(1, 1, 5)] // Basic test case where it doesn't go above the limit
+    [DataRow(5, 1, 5)] // Basic test case where it doesn't go above the limit
+    [DataRow(4, 1, 3)] // Basic test case where it doesn't go above the limit
     public async Task GetStock_GivesCorrectStock(int orderAmount1, int orderAmount2, int orderAmount3)
     {
         // Arrange : Make the order and recipes
@@ -117,24 +96,11 @@ public class StockServiceTests
             new PizzaAmount(PizzaRecipeType.RarePizza, (ushort)orderAmount3)
         ]);
 
-        StockDto recipeStock1 = new StockDto(StockType.UnicornDust, 1);
-        StockDto recipeStock2 = new StockDto(StockType.Sulphur, 10);
-        var rareRecipe = new PizzaRecipeDto(PizzaRecipeType.RarePizza, [recipeStock1], 1);
-        var oddRecipe = new PizzaRecipeDto(PizzaRecipeType.OddPizza, [recipeStock2], 100);
-        ComparableList<PizzaRecipeDto> recipeList = [rareRecipe, oddRecipe];
+        ComparableList<PizzaRecipeDto> recipeList = [new PizzaRecipeDto(PizzaRecipeType.RarePizza, [recipeStock1], 1), 
+                                                     new PizzaRecipeDto(PizzaRecipeType.OddPizza, [recipeStock2], 100)];
 
-        // Arrange : Make the mock recipe repository with recipes
-        var recipeRepository = new Mock<IRecipeRepository>(MockBehavior.Strict);
-        recipeRepository.Setup(x => x.GetRecipe(PizzaRecipeType.RarePizza))
-            .ReturnsAsync(rareRecipe);
-        recipeRepository.Setup(x => x.GetRecipe(PizzaRecipeType.OddPizza))
-            .ReturnsAsync(oddRecipe);
-
-        // Arrange : Make the mock stock repository with the stock
+        // Arrange : Make the mock stock repository
         var stockRepository = new Mock<IStockRepository>(MockBehavior.Strict);
-
-        StockDto mockStock1 = new StockDto(StockType.UnicornDust, 10);
-        StockDto mockStock2 = new StockDto(StockType.Sulphur, 10);
 
         stockRepository.Setup(x => x.GetStock(recipeStock1.StockType))
             .ReturnsAsync(mockStock1);
