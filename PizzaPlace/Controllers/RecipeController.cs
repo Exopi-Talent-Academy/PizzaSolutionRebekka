@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PizzaPlace.Models;
 using PizzaPlace.Services;
 
 namespace PizzaPlace.Controllers;
@@ -6,11 +7,15 @@ namespace PizzaPlace.Controllers;
 [Route("api/recipes")]
 public class RecipeController(IRecipeService recipeService) : ControllerBase
 {
-    /*[HttpGet]
-    public IActionResult GetRecipes()
+    [HttpPost]
+    public async Task<IActionResult> AddRecipe([FromBody] PizzaRecipeDto recipeDTO)
     {
-        return Ok(recipeService.GetPizzaRecipes());
-    }*/
+        return Ok(recipeService.AddPizzaRecipe(recipeDTO));
+    }
 
-    //[HttpPost]
+    [HttpPost]
+    public async Task<IActionResult> UpdateRecipe([FromBody] PizzaRecipeDto recipeDTO)
+    {
+        return Ok(recipeService.UpdatePizzaRecipe(recipeDTO));
+    }
 }

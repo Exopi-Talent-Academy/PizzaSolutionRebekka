@@ -26,4 +26,18 @@ public class RecipeService(IRecipeRepository recipeRepository) : IRecipeService
 
         return recipes;
     }
+
+    public async Task<PizzaRecipeDto> AddPizzaRecipe(PizzaRecipeDto recipe)
+    {
+        throw new NotImplementedException();
+
+        // Try to recipeRepository.AddRecipe
+    }
+
+    public async Task<PizzaRecipeDto> UpdatePizzaRecipe(PizzaRecipeDto recipe)
+    {
+        throw new NotImplementedException();
+
+        // Try to recipeRepository.GetRecipe
+    }
 }
