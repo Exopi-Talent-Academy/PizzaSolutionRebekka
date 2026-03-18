@@ -5,6 +5,12 @@ namespace PizzaPlace.Services;
 
 public class RecipeService(IRecipeRepository recipeRepository) : IRecipeService
 {
+    /// <summary>
+    /// Returns a list of the distinct recipes in an order
+    /// </summary>
+    /// <param name="order"></param>
+    /// <returns></returns>
+    // And by distinct is meant per PizzaRecipeType because they only have one recipe each
     public async Task<ComparableList<PizzaRecipeDto>> GetPizzaRecipes(PizzaOrder order)
     {
         var pizzaTypes = order.RequestedOrder

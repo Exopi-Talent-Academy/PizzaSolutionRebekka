@@ -1,42 +1,56 @@
 ﻿using PizzaPlace.Models;
+using PizzaPlace.Models.Types;
 using PizzaPlace.Repositories;
 
 namespace PizzaPlace.Services;
 
 public class StockService(IStockRepository stockRepository) : IStockService
 {
-    public Task<bool> HasInsufficientStock(PizzaOrder order, ComparableList<PizzaRecipeDto> recipeDtos)
+    /// <summary>
+    /// Checks whether there are enough ingredients for an order
+    /// </summary>
+    /// <param name="order"></param>
+    /// <param name="recipeDtos"></param>
+    /// <returns>true, if the stock is insufficient; otherwise, false</returns>
+    public async Task<bool> HasInsufficientStock(PizzaOrder order, ComparableList<PizzaRecipeDto> recipeDtos)
     {
-        ComparableList<StockDto> stockNeededForOrder = new ComparableList<StockDto>();
+        List<StockDto> stockNeededForOrder = new List<StockDto>();
+        Dictionary<PizzaRecipeType, int> recipeTypeAmountsInOrder = new Dictionary<PizzaRecipeType, int>();
 
-        // NEED TO TAKE INTO ACCOUNT THAT THE ORDER DECIDES HOW MANY OF SOMETHING THERE IS
-        // BOTH ORDER AND RECIPEDTOS HAVE A PIZZARECIPETYPE, PAIR 'EM UP
+        // Go through the ordered pizzas and add them to the dictionary with their amounts
+        foreach (var pizza in order.RequestedOrder)
+        {
+            if (recipeTypeAmountsInOrder.ContainsKey(pizza.PizzaType))
+            {
+                // If any of them are of the same type, their amounts get added together
+                recipeTypeAmountsInOrder[pizza.PizzaType] += pizza.Amount;
+            }
+            else
+            {
+                // If it's not in the list already, add it
+                recipeTypeAmountsInOrder.Add(pizza.PizzaType, pizza.Amount);
+            }
+        }
 
-        // Add together the PizzaAmounts in order where the PizzaType is the same?? Would change what I do for quantity
-
-        // Run through each StockType used in the order and add the ones who are the same together in a new stockdto
+        // Go through each recipe and add the needed stock to the list
         foreach (PizzaRecipeDto recipe in recipeDtos) 
         {
-            // Get the quantity of a specific pizza in an order
-            int quantity = 0;
+            // Get the quantity of a specific pizzatype in an order
+            int quantity = recipeTypeAmountsInOrder[recipe.RecipeType];
 
-            foreach (var pizza in order.RequestedOrder)
-            {
-                if (pizza.PizzaType == recipe.RecipeType)
-                {
-                    quantity = pizza.Amount;
-                    break;
-                }
-            }
-
+            // Go through the ingredients in the recipe and add them to the needed stock
             foreach (StockDto stock in recipe.Ingredients)
             {
+                // The number of the same pizza ordered decides how much of an ingredient is needed
                 StockDto newStock = stock with { Amount = (stock.Amount * quantity) };
 
+                // Check if the ingredient's stocktype is already in the list
                 if (stockNeededForOrder.Any(item => item.StockType == stock.StockType))
                 {
                     // If this stocktype is already in the list, add to it
-                    //CODE
+                    int index = stockNeededForOrder.IndexOf(stockNeededForOrder.Find(item => item.StockType == stock.StockType));
+                    int newAmount = stockNeededForOrder[index].Amount + newStock.Amount;
+                    stockNeededForOrder[index] = newStock with { Amount = newAmount };
                 }
                 else
                 {
@@ -46,10 +60,19 @@ public class StockService(IStockRepository stockRepository) : IStockService
             }
         }
 
-        // Then call GetStock from FakeStockRepository and compare with the above, if there's ever too many, return false
+        // Go through the list of the stock needed for an order
+        foreach (var neededStock in stockNeededForOrder)
+        {
+            StockDto currentStock = await stockRepository.GetStock(neededStock.StockType);
 
-        // Call GetStock from FakeStockRepository for each thing in the order and check if there's enough stock
+            // If the amount needed ever exceeds the amount in stock, return true because the stock is insufficient
+            if (currentStock.Amount < neededStock.Amount)
+            {
+                return true;
+            }
+        }
 
+        // The amount needed has never exceeded what's in stock, so return false
         return false;
     }
 
