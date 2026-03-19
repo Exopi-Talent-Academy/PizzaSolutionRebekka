@@ -12,12 +12,12 @@ public class RecipeController(IRecipeService recipeService) : ControllerBase
     {
         try
         {
-            var result = recipeService.AddPizzaRecipe(recipeDTO);
-            return Ok("New recipe added with id " + result);
+            var result = recipeService.AddPizzaRecipe(recipeDTO).Result;
+            return Ok($"New recipe added with id {result}.");
         }
         catch (PizzaException)
         {
-            return BadRequest("Recipe already exists. If you wish to update it, do that instead");
+            return BadRequest("Recipe already exists. If you wish to update it, do that instead.");
         }
     }
 
@@ -26,12 +26,12 @@ public class RecipeController(IRecipeService recipeService) : ControllerBase
     {
         try
         {
-            var result = recipeService.UpdatePizzaRecipe(recipeDTO);
-            return Ok($"Recipe with id {result} successfully updated");
+            var result = recipeService.UpdatePizzaRecipe(recipeDTO).Result;
+            return Ok($"Recipe with id {result} successfully updated.");
         }
         catch (PizzaException)
         {
-            return BadRequest("Recipe did not already exist. If you wish to add a new one, do that instead");
+            return BadRequest("Recipe did not already exist. If you wish to add a new one, do that instead.");
         }
     }
 }

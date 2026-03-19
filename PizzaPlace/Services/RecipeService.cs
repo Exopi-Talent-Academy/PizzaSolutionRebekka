@@ -34,7 +34,14 @@ public class RecipeService(IRecipeRepository recipeRepository) : IRecipeService
     /// <returns>id of the new recipe</returns>
     public async Task<long> AddPizzaRecipe(PizzaRecipeDto recipe)
     {
-        return await recipeRepository.AddRecipe(recipe);
+        try
+        {
+            return await recipeRepository.AddRecipe(recipe);
+        }
+        catch (PizzaException)
+        {
+            throw;
+        }
     }
 
     /// <summary>
@@ -54,7 +61,7 @@ public class RecipeService(IRecipeRepository recipeRepository) : IRecipeService
         }
         catch (PizzaException)
         {
-            throw new PizzaException("Recipe doesn't exist");
+            throw;
         }
 
         return await recipeRepository.UpdateRecipe(existingRecipeID, updatedRecipe);
