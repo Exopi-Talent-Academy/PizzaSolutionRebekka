@@ -2,6 +2,11 @@
 
 public class MenuService : IMenuService
 {
+    /// <summary>
+    /// Gets the menu depending on the time of day
+    /// </summary>
+    /// <param name="menuDate"></param>
+    /// <returns></returns>
     public Menu GetMenu(DateTimeOffset menuDate)
     {
         int currentHour = menuDate.Hour;
@@ -19,6 +24,7 @@ public class MenuService : IMenuService
         }
     }
 
+    // Creating a hard-coded list of menu items
     private ComparableList<MenuItem> GetMenuItems(bool isLunchTime)
     {
         ComparableList<MenuItem> list = new ComparableList<MenuItem>();

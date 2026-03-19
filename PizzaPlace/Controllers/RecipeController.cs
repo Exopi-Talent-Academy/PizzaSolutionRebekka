@@ -8,9 +8,17 @@ namespace PizzaPlace.Controllers;
 public class RecipeController(IRecipeService recipeService) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> AddRecipe([FromBody] PizzaRecipeDto recipeDTO)
+    public IActionResult AddRecipe([FromBody] PizzaRecipeDto recipeDTO)
     {
-        return Ok(recipeService.AddPizzaRecipe(recipeDTO));
+        try
+        {
+            var result = recipeService.AddPizzaRecipe(recipeDTO);
+            return Ok("New recipe added with id " + result);
+        }
+        catch (PizzaException)
+        {
+            return BadRequest("Recipe already exists. If you wish to update it, do that instead");
+        }
     }
 
     [HttpPost]

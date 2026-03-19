@@ -39,4 +39,69 @@ public class RecipeServiceTests
         Assert.AreEqual(expected, actual);
         //recipeRepository.VerifyAll(); // this line was in the guide but was missing here
     }
+
+    [TestMethod]
+    public async Task AddRecipe_AddingOneRecipe()
+    {
+        // Arrange
+        var recipe = new PizzaRecipeDto(PizzaRecipeType.StandardPizza, [new StockDto(StockType.Tomatoes, 1)], 15);
+
+        var recipeRepository = new Mock<IRecipeRepository>(MockBehavior.Strict);
+        recipeRepository.Setup(x => x.AddRecipe(recipe))
+            .ReturnsAsync(1); // 1 is the first id a recipe can be given
+
+        var service = GetService(recipeRepository);
+
+        // Act
+        var result = await service.AddPizzaRecipe(recipe);
+
+        // Assert
+        Assert.AreEqual(1, result);
+    }
+
+    [TestMethod]
+    public async Task AddRecipe_AddingTwoRecipes()
+    {
+        // Arrange
+        var recipe1 = new PizzaRecipeDto(PizzaRecipeType.StandardPizza, [new StockDto(StockType.Tomatoes, 1)], 15);
+        var recipe2 = new PizzaRecipeDto(PizzaRecipeType.OddPizza, [new StockDto(StockType.Bacon, 5)], 20);
+
+        var recipeRepository = new Mock<IRecipeRepository>(MockBehavior.Strict);
+        recipeRepository.Setup(x => x.AddRecipe(recipe1))
+            .ReturnsAsync(1); // 1 is the first id a recipe can be given
+        recipeRepository.Setup(x => x.AddRecipe(recipe2))
+            .ReturnsAsync(2);
+
+        var service = GetService(recipeRepository);
+
+        // Act
+        var result1 = await service.AddPizzaRecipe(recipe1);
+        var result2 = await service.AddPizzaRecipe(recipe2);
+
+        // Assert
+        Assert.AreEqual(1, result1);
+        Assert.AreEqual(2, result2);
+    }
+
+    [TestMethod]
+    public async Task UpdateRecipe_UpdatesRecipe()
+    {
+        // Arrange
+        var oldRecipe = new PizzaRecipeDto(PizzaRecipeType.StandardPizza, [new StockDto(StockType.Bacon, 1)], 15);
+        var updatedRecipe = new PizzaRecipeDto(PizzaRecipeType.StandardPizza, [new StockDto(StockType.Tomatoes, 1)], 15);
+
+        var recipeRepository = new Mock<IRecipeRepository>(MockBehavior.Strict);
+        recipeRepository.Setup(x => x.GetRecipe(updatedRecipe.RecipeType))
+            .ReturnsAsync(oldRecipe);
+        recipeRepository.Setup(x => x.AddRecipe(updatedRecipe))
+            .ReturnsAsync(1); // 1 is the first id a recipe can be given
+
+        var service = GetService(recipeRepository);
+
+        // Act
+        var result = await service.UpdatePizzaRecipe(updatedRecipe);
+
+        // Assert
+        Assert.AreEqual(updatedRecipe with { Id = 1 }, result);
+    }
 }

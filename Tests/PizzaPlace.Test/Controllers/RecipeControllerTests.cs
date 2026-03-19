@@ -25,12 +25,12 @@ public class RecipeControllerTests
 
         var recipeService = new Mock<IRecipeService>(MockBehavior.Strict);
         recipeService.Setup(x => x.AddPizzaRecipe(recipe))
-            .ReturnsAsync(recipe);
+            .ReturnsAsync(1);
 
         var controller = GetController(recipeService);
 
         // Act
-        var actual = await controller.AddRecipe(recipe);
+        var actual = controller.AddRecipe(recipe);
 
         // Assert
         Assert.IsInstanceOfType<OkObjectResult>(actual);
