@@ -87,13 +87,13 @@ public class RecipeServiceTests
     public async Task UpdateRecipe_UpdatesRecipe()
     {
         // Arrange
-        var oldRecipe = new PizzaRecipeDto(PizzaRecipeType.StandardPizza, [new StockDto(StockType.Bacon, 1)], 15);
+        var oldRecipe = new PizzaRecipeDto(PizzaRecipeType.StandardPizza, [new StockDto(StockType.Bacon, 1)], 15, 1);
         var updatedRecipe = new PizzaRecipeDto(PizzaRecipeType.StandardPizza, [new StockDto(StockType.Tomatoes, 1)], 15);
 
         var recipeRepository = new Mock<IRecipeRepository>(MockBehavior.Strict);
         recipeRepository.Setup(x => x.GetRecipe(updatedRecipe.RecipeType))
             .ReturnsAsync(oldRecipe);
-        recipeRepository.Setup(x => x.AddRecipe(updatedRecipe))
+        recipeRepository.Setup(x => x.UpdateRecipe(oldRecipe.Id, updatedRecipe))
             .ReturnsAsync(1); // 1 is the first id a recipe can be given
 
         var service = GetService(recipeRepository);
@@ -102,6 +102,6 @@ public class RecipeServiceTests
         var result = await service.UpdatePizzaRecipe(updatedRecipe);
 
         // Assert
-        Assert.AreEqual(updatedRecipe with { Id = 1 }, result);
+        Assert.AreEqual(oldRecipe.Id, result);
     }
 }

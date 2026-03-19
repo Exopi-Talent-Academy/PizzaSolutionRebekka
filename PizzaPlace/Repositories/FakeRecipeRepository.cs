@@ -27,6 +27,25 @@ public class FakeRecipeRepository : FakeDatabase<PizzaRecipeDto>, IRecipeReposit
         return Task.FromResult(recipe);
     }
 
+    /// <summary>
+    /// Updates the information about a recipe with a specific id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="newRecipe"></param>
+    /// <returns>id of the updated recipe</returns>
+    /// <exception cref="PizzaException"></exception>
+    public Task<long> UpdateRecipe(long id, PizzaRecipeDto newRecipe)
+    {
+        lock (_lock)
+        {
+            if (!Get(x => x.RecipeType == newRecipe.RecipeType).Any())
+                throw new PizzaException($"Recipe for {newRecipe.RecipeType} doesn't already exist");
+
+            Update(newRecipe, id);
+            return Task.FromResult(id);
+        }
+    }
+
     public void AddStandardRecipes()
     {
         if (Get(_ => true).Any())

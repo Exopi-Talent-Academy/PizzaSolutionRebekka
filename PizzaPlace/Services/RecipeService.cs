@@ -6,10 +6,10 @@ namespace PizzaPlace.Services;
 public class RecipeService(IRecipeRepository recipeRepository) : IRecipeService
 {
     /// <summary>
-    /// Returns a list of the distinct recipes in an order
+    /// Get the list of distinct recipes in an order
     /// </summary>
     /// <param name="order"></param>
-    /// <returns></returns>
+    /// <returns>list of pizza recipes</returns>
     // And by distinct is meant per PizzaRecipeType because they only have one recipe each
     public async Task<ComparableList<PizzaRecipeDto>> GetPizzaRecipes(PizzaOrder order)
     {
@@ -27,15 +27,36 @@ public class RecipeService(IRecipeRepository recipeRepository) : IRecipeService
         return recipes;
     }
 
+    /// <summary>
+    /// Adds a pizza recipe to the repository
+    /// </summary>
+    /// <param name="recipe"></param>
+    /// <returns>id of the new recipe</returns>
     public async Task<long> AddPizzaRecipe(PizzaRecipeDto recipe)
     {
         return await recipeRepository.AddRecipe(recipe);
     }
 
-    public async Task<PizzaRecipeDto> UpdatePizzaRecipe(PizzaRecipeDto recipe)
+    /// <summary>
+    /// Updates an existing pizza recipe with new information
+    /// </summary>
+    /// <param name="updatedRecipe"></param>
+    /// <returns>id of the updated recipe</returns>
+    /// <exception cref="PizzaException"></exception>
+    public async Task<long> UpdatePizzaRecipe(PizzaRecipeDto updatedRecipe)
     {
-        throw new NotImplementedException();
+        long existingRecipeID;
+        
+        try
+        {
+            var existingRecipe = await recipeRepository.GetRecipe(updatedRecipe.RecipeType);
+            existingRecipeID = existingRecipe.Id;
+        }
+        catch (PizzaException)
+        {
+            throw new PizzaException("Recipe doesn't exist");
+        }
 
-        // Try to recipeRepository.GetRecipe
+        return await recipeRepository.UpdateRecipe(existingRecipeID, updatedRecipe);
     }
 }

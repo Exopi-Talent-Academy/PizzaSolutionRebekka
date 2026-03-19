@@ -21,9 +21,17 @@ public class RecipeController(IRecipeService recipeService) : ControllerBase
         }
     }
 
-    [HttpPost]
-    public async Task<IActionResult> UpdateRecipe([FromBody] PizzaRecipeDto recipeDTO)
+    [HttpPut]
+    public IActionResult UpdateRecipe([FromBody] PizzaRecipeDto recipeDTO)
     {
-        return Ok(recipeService.UpdatePizzaRecipe(recipeDTO));
+        try
+        {
+            var result = recipeService.UpdatePizzaRecipe(recipeDTO);
+            return Ok($"Recipe with id {result} successfully updated");
+        }
+        catch (PizzaException)
+        {
+            return BadRequest("Recipe did not already exist. If you wish to add a new one, do that instead");
+        }
     }
 }
