@@ -72,4 +72,13 @@ public class StockService(IStockRepository stockRepository) : IStockService
 
         return recipeTypeAmountsInOrder;
     }
+
+    private IEnumerable<StockDto> GetRecipeTypeAmounts(ComparableList<PizzaAmount> requestedOrder, ComparableList<PizzaRecipeDto> recipeDtos)
+    {
+        IEnumerable<StockDto> unsortedNeededStock = recipeDtos.Select(recipe => recipe.Ingredients.Select(ingredient => ingredient.Where(requestedOrder.Select(pizza => new StockDto(ingredient.StockType, pizza.Amount * ingredient.Amount))));
+
+        IEnumerable<StockDto> recipeTypeAmounts = PizzaHelperExtensions.GatherSameTypeOfStock(unsortedNeededStock);
+
+        return recipeTypeAmounts;
+    }
 }
