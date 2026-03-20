@@ -19,7 +19,6 @@ public class AssemblyLinePizzaOven(TimeProvider timeProvider) : PizzaOven(timePr
 
     protected override void PlanPizzaMaking(IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders)
     {
-        // Dictionary that holds the cooking time of the last time a recipe was used
         Dictionary<PizzaRecipeType, int> previousCookingTime = new Dictionary<PizzaRecipeType, int>();
 
         // Go through each thing in the order, manipulate its cooking time depending on the last cooking time and add it to the _pizzaQueue
@@ -29,10 +28,8 @@ public class AssemblyLinePizzaOven(TimeProvider timeProvider) : PizzaOven(timePr
 
             if (previousCookingTime.ContainsKey(recipe.RecipeType))
             {
-                // If the PizzaRecipeType has been seen before, edit the cooking time dependent on the last one
                 newCookingTimeInMinutes = previousCookingTime[recipe.RecipeType] - SubsequentPizzaTimeSavingsInMinutes;
 
-                // Check if it has reached minimum or below
                 if (newCookingTimeInMinutes <= MinimumCookingTimeMinutes)
                 {
                     // If true, ensure they are the minimum
@@ -41,19 +38,16 @@ public class AssemblyLinePizzaOven(TimeProvider timeProvider) : PizzaOven(timePr
                 }
                 else
                 {
-                    // If the cooking time hasn't yet reached below the minimum, change the dictionary to reflect it
                     previousCookingTime[recipe.RecipeType] = newCookingTimeInMinutes;
                 }
             }
             else 
             {
                 // If this PizzaRecipeType hasn't been seen before
-                // Add to the list and since it's the first time, it gets the setup minutes
                 newCookingTimeInMinutes = recipe.CookingTimeMinutes + SetupTimeMinutes;
                 previousCookingTime.Add(recipe.RecipeType, newCookingTimeInMinutes);
             }
 
-            // Add to queue with the changed cooking time
             PizzaRecipeDto changedRecipe = recipe with { CookingTimeMinutes = newCookingTimeInMinutes };
             _pizzaQueue.Enqueue((MakePizza(changedRecipe), orderGuid));
         }

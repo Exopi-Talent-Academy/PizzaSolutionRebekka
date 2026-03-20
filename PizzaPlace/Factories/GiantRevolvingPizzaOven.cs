@@ -15,10 +15,9 @@ public class GiantRevolvingPizzaOven(TimeProvider timeProvider) : PizzaOven(time
 
     protected override void PlanPizzaMaking(IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders)
     {
-        // Turn the recipeOrders into a normal list that things can be removed from
-        List<(PizzaRecipeDto, Guid)> orderList = recipeOrders.ToList();
+        List<(PizzaRecipeDto, Guid)> orderList = recipeOrders.ToList(); // making it into a list that things can be removed from
 
-        // Until the list is empty, run through it and create new MakePizzas for each cooking time
+        // Until the list is empty, run through it and create new sublists for each cooking time
         while (orderList.Any())
         {
             var firstOrder = orderList.First();
@@ -36,7 +35,6 @@ public class GiantRevolvingPizzaOven(TimeProvider timeProvider) : PizzaOven(time
             // Cook the pizzas
             MakePizzas(sublist);
 
-            // Add to queue
             foreach (var (recipe, guid) in sublist)
             {
                 _pizzaQueue.Enqueue((GetPizzas(recipe.RecipeType), guid));
@@ -51,7 +49,6 @@ public class GiantRevolvingPizzaOven(TimeProvider timeProvider) : PizzaOven(time
         // If the list is longer than the oven capacity, then we have to take it in chunks
         while (recipes.Any() && (recipes.Count > GiantRevolvingPizzaOvenCapacity))
         {
-            // We wait for the pizzas to cook and then remove them
             await CookPizza(recipes[0].Item1.CookingTimeMinutes);
             recipes.RemoveRange(0, GiantRevolvingPizzaOvenCapacity);
         }
