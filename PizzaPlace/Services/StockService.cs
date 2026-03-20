@@ -38,7 +38,7 @@ public class StockService(IStockRepository stockRepository) : IStockService
     /// </summary>
     /// <param name="order"></param>
     /// <param name="recipeDtos"></param>
-    /// <returns>Returns a ComparableList<StockDto> with the stock</returns>
+    /// <returns>a ComparableList<StockDto> with the stock</returns>
     public async Task<ComparableList<StockDto>> GetStock(PizzaOrder order, ComparableList<PizzaRecipeDto> recipeDtos)
     {
         ComparableList<StockDto> stockNeededForOrder = new ComparableList<StockDto>();
@@ -79,7 +79,7 @@ public class StockService(IStockRepository stockRepository) : IStockService
     /// Get the amounts of types of PizzaRecipeType in dictionary from an order
     /// </summary>
     /// <param name="requestedOrder"></param>
-    /// <returns></returns>
+    /// <returns>Dictionary with the PizzaRecipeType as the keys and their amounts as the value</returns>
     private Dictionary<PizzaRecipeType, int> GetRecipeTypeAmountsInOrder(ComparableList<PizzaAmount> requestedOrder)
     {
         Dictionary<PizzaRecipeType, int> recipeTypeAmountsInOrder = new Dictionary<PizzaRecipeType, int>();
