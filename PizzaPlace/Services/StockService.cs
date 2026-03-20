@@ -1,6 +1,7 @@
 ﻿using PizzaPlace.Models;
 using PizzaPlace.Models.Types;
 using PizzaPlace.Repositories;
+using PizzaPlace.Extensions;
 
 namespace PizzaPlace.Services;
 
@@ -38,31 +39,11 @@ public class StockService(IStockRepository stockRepository) : IStockService
     /// <returns>a ComparableList<StockDto> with the stock</returns>
     public async Task<ComparableList<StockDto>> GetStock(PizzaOrder order, ComparableList<PizzaRecipeDto> recipeDtos)
     {
-        ComparableList<StockDto> stockNeededForOrder = new ComparableList<StockDto>();
         Dictionary<PizzaRecipeType, int> recipeTypeAmountsInOrder = GetRecipeTypeAmountsInOrder(order.RequestedOrder);
 
-        // Go through each recipe and add the needed stock to the list
-        foreach (PizzaRecipeDto recipe in recipeDtos)
-        {
-            int quantity = recipeTypeAmountsInOrder[recipe.RecipeType];
+        IEnumerable<PizzaPrepareOrder> ordersToGetStockFrom = recipeDtos.Select(recipe => new PizzaPrepareOrder(recipe, recipeTypeAmountsInOrder[recipe.RecipeType]));
 
-            foreach (StockDto stock in recipe.Ingredients)
-            {
-                StockDto newStock = stock with { Amount = (stock.Amount * quantity) };
-
-                // Check if the ingredient's stocktype is already in the list
-                if (stockNeededForOrder.Any(item => item.StockType == stock.StockType))
-                {
-                    int index = stockNeededForOrder.IndexOf(stockNeededForOrder.FirstOrDefault(item => item.StockType == stock.StockType)!);
-                    int newAmount = stockNeededForOrder[index].Amount + newStock.Amount;
-                    stockNeededForOrder[index] = newStock with { Amount = newAmount };
-                }
-                else
-                {
-                    stockNeededForOrder.Add(newStock);
-                }
-            }
-        }
+        ComparableList<StockDto> stockNeededForOrder = PizzaHelperExtensions.GetRequiredStock(ordersToGetStockFrom).ToComparableList();
 
         return stockNeededForOrder;
     }
