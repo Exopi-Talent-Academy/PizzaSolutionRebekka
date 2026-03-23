@@ -16,7 +16,7 @@ public class StockService(IStockRepository stockRepository) : IStockService
     public async Task<bool> HasInsufficientStock(PizzaOrder order, ComparableList<PizzaRecipeDto> recipeDtos)
     {
         ComparableList<StockDto> stockNeededForOrder = await GetStock(order, recipeDtos);
-        Dictionary<PizzaRecipeType, int> recipeTypeAmountsInOrder = GetRecipeTypeAmountsInOrder(order.RequestedOrder);
+        Dictionary<PizzaRecipeType, int> recipeTypeAmountsInOrder = GetRecipeTypeAmounts(order.RequestedOrder);
 
         foreach (var neededStock in stockNeededForOrder)
         {
@@ -39,7 +39,7 @@ public class StockService(IStockRepository stockRepository) : IStockService
     /// <returns>a ComparableList<StockDto> with the stock</returns>
     public async Task<ComparableList<StockDto>> GetStock(PizzaOrder order, ComparableList<PizzaRecipeDto> recipeDtos)
     {
-        Dictionary<PizzaRecipeType, int> recipeTypeAmountsInOrder = GetRecipeTypeAmountsInOrder(order.RequestedOrder);
+        Dictionary<PizzaRecipeType, int> recipeTypeAmountsInOrder = GetRecipeTypeAmounts(order.RequestedOrder);
 
         IEnumerable<PizzaPrepareOrder> ordersToGetStockFrom = recipeDtos.Select(recipe => new PizzaPrepareOrder(recipe, recipeTypeAmountsInOrder[recipe.RecipeType]));
 
@@ -53,11 +53,10 @@ public class StockService(IStockRepository stockRepository) : IStockService
     /// </summary>
     /// <param name="requestedOrder"></param>
     /// <returns>Dictionary with the PizzaRecipeType as the keys and their amounts as the value</returns>
-    private Dictionary<PizzaRecipeType, int> GetRecipeTypeAmountsInOrder(ComparableList<PizzaAmount> requestedOrder)
+    private Dictionary<PizzaRecipeType, int> GetRecipeTypeAmounts(ComparableList<PizzaAmount> requestedOrder)
     {
         Dictionary<PizzaRecipeType, int> recipeTypeAmountsInOrder = new Dictionary<PizzaRecipeType, int>();
 
-        // Go through the ordered pizzas and add them to the dictionary with their amounts
         foreach (var pizza in requestedOrder)
         {
             if (recipeTypeAmountsInOrder.ContainsKey(pizza.PizzaType))
@@ -71,14 +70,5 @@ public class StockService(IStockRepository stockRepository) : IStockService
         }
 
         return recipeTypeAmountsInOrder;
-    }
-
-    private IEnumerable<StockDto> GetRecipeTypeAmounts(ComparableList<PizzaAmount> requestedOrder, ComparableList<PizzaRecipeDto> recipeDtos)
-    {
-        IEnumerable<StockDto> unsortedNeededStock = recipeDtos.Select(recipe => recipe.Ingredients.Select(ingredient => ingredient.Where(requestedOrder.Select(pizza => new StockDto(ingredient.StockType, pizza.Amount * ingredient.Amount))));
-
-        IEnumerable<StockDto> recipeTypeAmounts = PizzaHelperExtensions.GatherSameTypeOfStock(unsortedNeededStock);
-
-        return recipeTypeAmounts;
     }
 }
