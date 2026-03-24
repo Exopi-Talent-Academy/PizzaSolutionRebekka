@@ -57,6 +57,7 @@ public abstract class PizzaOven(TimeProvider timeProvider) : IPizzaOven
     {
         PizzaRecipeType.StandardPizza => new StandardPizza(),
         PizzaRecipeType.ExtremelyTastyPizza => new ExtremelyTastyPizza(),
+        PizzaRecipeType.EmptyPizza => new EmptyPizza(),
         _ => throw new NotSupportedException($"Currently unable to make pizza for a recipe of type {recipeType}"),
     };
 
