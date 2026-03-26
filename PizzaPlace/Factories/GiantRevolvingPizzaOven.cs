@@ -13,7 +13,7 @@ public class GiantRevolvingPizzaOven(TimeProvider timeProvider) : PizzaOven(time
 
     protected override int Capacity => GiantRevolvingPizzaOvenCapacity;
 
-    //protected override void PlanPizzaMaking(IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders) // cooking time last
+    //protected override void PlanPizzaMaking(IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders) // cooking time last //fails all tests
     //{
     //    List<(PizzaRecipeDto, Guid)> orderList = recipeOrders.ToList(); // making it into a list that things can be removed from
     //    List<List<(PizzaRecipeDto, Guid)>> orderListByCookingTime = []; // cannot be a dictionary because it needs to allow cooking time repeats
@@ -60,53 +60,53 @@ public class GiantRevolvingPizzaOven(TimeProvider timeProvider) : PizzaOven(time
     //    }
     //}
 
-    //protected override void PlanPizzaMaking(IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders) // cooking time first
-    //{
-    //    List<(PizzaRecipeDto, Guid)> orderList = recipeOrders.ToList(); // making it into a list that things can be removed from
+    protected override void PlanPizzaMaking(IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders) // cooking time first //only works with 100 pizzas
+    {
+        List<(PizzaRecipeDto, Guid)> orderList = recipeOrders.ToList(); // making it into a list that things can be removed from
 
-    //    List<(PizzaRecipeDto, Guid)> seenOrdersList = [];
+        List<(PizzaRecipeDto, Guid)> seenOrdersList = [];
 
-    //    int breakFlag = orderList.Count;
-    //    while (breakFlag != 0)
-    //    {
-    //        var lastOrder = orderList[breakFlag - 1];
-    //        int noOfSameCookingTimePizzas = 0;
+        int breakFlag = orderList.Count;
+        while (breakFlag != 0)
+        {
+            var lastOrder = orderList[breakFlag - 1];
+            int noOfSameCookingTimePizzas = 0;
 
-    //        foreach (var order in orderList)
-    //        {
-    //            if (seenOrdersList.Contains(order))
-    //            {
-    //                breakFlag--;
-    //                continue;
-    //            }
+            foreach (var order in orderList)
+            {
+                if (seenOrdersList.Contains(order))
+                {
+                    breakFlag--;
+                    continue;
+                }
 
-    //            if (order.Item1.CookingTimeMinutes == lastOrder.Item1.CookingTimeMinutes)
-    //            {
-    //                if (order.Item2 != lastOrder.Item2)
-    //                {
-    //                    var newRecipeCookingTime = order.Item1 with { CookingTimeMinutes = 0 };
-    //                    _pizzaQueue.Enqueue((MakePizza(newRecipeCookingTime), order.Item2));
-    //                }
-    //                else
-    //                {
-    //                    _pizzaQueue.Enqueue((MakePizza(order.Item1), order.Item2));
-    //                }
+                if (order.Item1.CookingTimeMinutes == lastOrder.Item1.CookingTimeMinutes)
+                {
+                    if (order.Item2 != lastOrder.Item2)
+                    {
+                        var newRecipeCookingTime = order.Item1 with { CookingTimeMinutes = 0 };
+                        _pizzaQueue.Enqueue((MakePizza(newRecipeCookingTime), order.Item2));
+                    }
+                    else
+                    {
+                        _pizzaQueue.Enqueue((MakePizza(order.Item1), order.Item2));
+                    }
 
-    //                seenOrdersList.Add(order);
-    //                noOfSameCookingTimePizzas++;
-    //            }
+                    seenOrdersList.Add(order);
+                    noOfSameCookingTimePizzas++;
+                }
 
-    //            breakFlag--;
+                breakFlag--;
 
-    //            if (noOfSameCookingTimePizzas == GiantRevolvingPizzaOvenCapacity)
-    //            {
-    //                break;
-    //            }
-    //        }
-    //    }
-    //}
+                if (noOfSameCookingTimePizzas == GiantRevolvingPizzaOvenCapacity)
+                {
+                    break;
+                }
+            }
+        }
+    }
 
-    //protected override void PlanPizzaMaking(IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders) // cooking time first
+    //protected override void PlanPizzaMaking(IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders) //only works with 100 pizzas
     //{
     //    List<(PizzaRecipeDto, Guid)> orderList = recipeOrders.ToList(); // making it into a list that things can be done with
 
@@ -139,20 +139,20 @@ public class GiantRevolvingPizzaOven(TimeProvider timeProvider) : PizzaOven(time
     //            {
     //                if (noOfTimesSeenBefore == GiantRevolvingPizzaOvenCapacity)
     //                {
-    //                 //   If the cooking time has already been seen but is at full capacity
-    //                   noOfTimesSeenBefore = 0;
+    //                    //   If the cooking time has already been seen but is at full capacity
+    //                    noOfTimesSeenBefore = 0;
     //                    _pizzaQueue.Enqueue((MakePizza(orderRecipe), orderGuid));
     //                }
     //                else if (orderGuid != firstOrder.Item2)
     //                {
-    //                 //   If the cooking time has already been seen and is not at full capacity
-    //                   var newRecipeCookingTime = orderRecipe with { CookingTimeMinutes = 0 };
+    //                    //   If the cooking time has already been seen and is not at full capacity
+    //                    var newRecipeCookingTime = orderRecipe with { CookingTimeMinutes = 0 };
     //                    _pizzaQueue.Enqueue((MakePizza(newRecipeCookingTime), orderGuid));
     //                }
     //                else
     //                {
-    //                 //   If this is the first time a cooking time is seen
-    //                   _pizzaQueue.Enqueue((MakePizza(orderRecipe), orderGuid));
+    //                    //   If this is the first time a cooking time is seen
+    //                    _pizzaQueue.Enqueue((MakePizza(orderRecipe), orderGuid));
     //                }
 
     //                noOfTimesSeenBefore++;
@@ -164,41 +164,21 @@ public class GiantRevolvingPizzaOven(TimeProvider timeProvider) : PizzaOven(time
     //    }
     //}
 
-    //protected override void PlanPizzaMaking(IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders) // cooking time first
+    //protected override void PlanPizzaMaking(IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders) //only works with 100 pizzas
     //{
     //    var orderList = recipeOrders.OrderBy(x => x.Recipe.CookingTimeMinutes).ToList();
     //    int noOfTimesSeenBefore = 0;
     //    int previousCookingTime = -1; // set to unallowed cooking time
-    //    bool isFirst = true;
 
     //    foreach (var (orderRecipe, orderGuid) in orderList)
     //    {
-    //        if (previousCookingTime == orderRecipe.CookingTimeMinutes)
+    //        if (previousCookingTime == orderRecipe.CookingTimeMinutes && noOfTimesSeenBefore != GiantRevolvingPizzaOvenCapacity)
     //        {
-    //            if (noOfTimesSeenBefore == GiantRevolvingPizzaOvenCapacity)
-    //            {
-    //                noOfTimesSeenBefore = 0;
-    //                _pizzaQueue.Enqueue((MakePizza(orderRecipe), orderGuid));
-    //            }
-    //            else
-    //            {
-    //                var newRecipeCookingTime = orderRecipe with { CookingTimeMinutes = 0 };
-    //                _pizzaQueue.Enqueue((MakePizza(newRecipeCookingTime), orderGuid));
-    //            }
-    //        } 
+    //            var newRecipeCookingTime = orderRecipe with { CookingTimeMinutes = 0 };
+    //            _pizzaQueue.Enqueue((MakePizza(newRecipeCookingTime), orderGuid));
+    //        }
     //        else
     //        {
-    //            if (!isFirst)
-    //            {
-    //                // INSERT EMPTY NUMBER OF ORDERS DEPENDING ON THE noOfTimesSeenBefore
-    //                for (int i = noOfTimesSeenBefore; i < GiantRevolvingPizzaOvenCapacity; i++)
-    //                {
-    //                    PizzaRecipeDto emptyPizza = new PizzaRecipeDto(PizzaRecipeType.EmptyPizza, [], 0);
-    //                    _pizzaQueue.Enqueue((MakePizza(emptyPizza), new Guid()));
-    //                }
-    //            }
-
-    //            isFirst = false;
     //            noOfTimesSeenBefore = 0;
     //            _pizzaQueue.Enqueue((MakePizza(orderRecipe), orderGuid));
     //        }
@@ -208,7 +188,62 @@ public class GiantRevolvingPizzaOven(TimeProvider timeProvider) : PizzaOven(time
     //    }
     //}
 
-    protected override void PlanPizzaMaking(IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders)
+    //protected override void PlanPizzaMaking(IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders) //keeps spinning
+    //{
+    //    var groups = recipeOrders.GroupBy(p => p.Recipe.CookingTimeMinutes).Select(g => g.ToList()).ToList();
+
+    //    foreach (var group in groups)
+    //    {
+    //        var batches = group.Chunk(GiantRevolvingPizzaOvenCapacity);
+
+    //        foreach (var batch in batches)
+    //        {
+    //            var list = batch.ToList();
+
+    //            while (list.Count < GiantRevolvingPizzaOvenCapacity)
+    //            {
+    //                list.Add((new PizzaRecipeDto(PizzaRecipeType.EmptyPizza, [], 0), Guid.NewGuid()));
+    //            }
+
+    //            for (int i = 0; i < list.Count; i++)
+    //            {
+    //                var (recipe, guid) = list[i];
+    //                var finalRecipe =
+    //                    (i == 0) ? recipe :
+    //                               recipe with { CookingTimeMinutes = 0 };
+
+    //                _pizzaQueue.Enqueue((MakePizza(finalRecipe), guid));
+    //            }
+    //        }
+    //    }
+    //}
+
+    //protected override void PlanPizzaMaking(IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders) //keeps spinning
+    //{
+    //    var groups = recipeOrders.GroupBy(p => p.Recipe.CookingTimeMinutes).Select(g => g.ToList()).ToList();
+
+    //    foreach (var group in groups)
+    //    {
+    //        var batches = group.Chunk(GiantRevolvingPizzaOvenCapacity);
+
+    //        foreach (var batch in batches)
+    //        {
+    //            var list = batch.ToList();
+
+    //            while (list.Count < GiantRevolvingPizzaOvenCapacity)
+    //            {
+    //                list.Add((new PizzaRecipeDto(PizzaRecipeType.EmptyPizza, [], list[0].Recipe.CookingTimeMinutes), Guid.NewGuid()));
+    //            }
+
+    //            foreach (var (recipe, guid) in list)
+    //            {
+    //                _pizzaQueue.Enqueue((MakePizza(recipe), guid));
+    //            }
+    //        }
+    //    }
+    //}
+
+    protected override void PlanPizzaMaking(IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders) //fails all tests
     {
         var groups = recipeOrders.GroupBy(p => p.Recipe.CookingTimeMinutes).Select(g => g.ToList()).ToList();
 
@@ -220,25 +255,35 @@ public class GiantRevolvingPizzaOven(TimeProvider timeProvider) : PizzaOven(time
             {
                 var list = batch.ToList();
 
-                // Pad if necessary
-                while (list.Count < GiantRevolvingPizzaOvenCapacity)
-                {
-                    list.Add((new PizzaRecipeDto(PizzaRecipeType.EmptyPizza, [], 0), Guid.NewGuid()));
-                }
+                MakePizzas(list);
 
-                // Enqueue correctly
-                for (int i = 0; i < list.Count; i++)
+                foreach (var (recipe, guid) in list)
                 {
-                    var (recipe, guid) = list[i];
-                    var finalRecipe =
-                        (i == 0) ? recipe :
-                                   recipe with { CookingTimeMinutes = 0 };
-
-                    _pizzaQueue.Enqueue((MakePizza(finalRecipe), guid));
+                    _pizzaQueue.Enqueue((GetPizzaInPizzas(recipe), guid));
                 }
             }
         }
     }
+
+    private Func<Task<List<(PizzaRecipeDto, Guid)>>> MakePizzas(List<(PizzaRecipeDto, Guid)> batch) => async () =>
+    {
+        await CookPizza(batch[0].Item1.CookingTimeMinutes);
+
+        return batch;
+    };
+
+    private async Task CookPizzas(List<(PizzaRecipeDto, Guid)> batch)
+    {
+        foreach (var (recipe, guid) in batch)
+        {
+            await CookPizza(recipe.CookingTimeMinutes);
+        }
+    }
+
+    private Func<Task<Pizza?>> GetPizzaInPizzas(PizzaRecipeDto recipe) => async () =>
+    {
+        return GetPizza(recipe.RecipeType);
+    };
 
     private Func<Task<Pizza?>> MakePizza(PizzaRecipeDto recipe) => async () =>
     {
@@ -246,54 +291,4 @@ public class GiantRevolvingPizzaOven(TimeProvider timeProvider) : PizzaOven(time
 
         return GetPizza(recipe.RecipeType);
     };
-
-    //NOT IMPLEMENTED CORRECTLY
-    //protected override void PlanPizzaMaking(IEnumerable<(PizzaRecipeDto Recipe, Guid Guid)> recipeOrders)
-    //{
-    //    List<(PizzaRecipeDto, Guid)> orderList = recipeOrders.ToList(); // making it into a list that things can be removed from
-
-    //    // Until the list is empty, run through it and create new sublists for each cooking time
-    //    while (orderList.Any())
-    //    {
-    //        var firstOrder = orderList.First();
-    //        List<(PizzaRecipeDto, Guid)> sublist = [];
-
-    //        foreach (var order in orderList)
-    //        {
-    //            if (order.Item1.CookingTimeMinutes == firstOrder.Item1.CookingTimeMinutes)
-    //            {
-    //                sublist.Add(order);
-    //                orderList.Remove(order);
-    //            }
-    //        }
-
-    //        // Cook the pizzas
-    //        MakePizzas(sublist);
-
-    //        foreach (var (recipe, guid) in sublist)
-    //        {
-    //            _pizzaQueue.Enqueue((GetPizzas(recipe.RecipeType), guid));
-    //        }
-    //    }
-    //}
-
-    //private async void MakePizzas(List<(PizzaRecipeDto, Guid)> recipes)
-    //{
-    //    // They all have the same cooking time, so we only need to wait for one of them for each 120
-
-    //    // If the list is longer than the oven capacity, then we have to take it in chunks
-    //    while (recipes.Any() && (recipes.Count > GiantRevolvingPizzaOvenCapacity))
-    //    {
-    //        await CookPizza(recipes[0].Item1.CookingTimeMinutes);
-    //        recipes.RemoveRange(0, GiantRevolvingPizzaOvenCapacity);
-    //    }
-
-    //    // The last time we wait for them to finish. Or the first, if there's 120 or less recipes to cook
-    //    await CookPizza(recipes[0].Item1.CookingTimeMinutes);
-    //}
-
-    //private Func<Task<Pizza?>> GetPizzas(PizzaRecipeType recipeType) => async () =>
-    //{
-    //    return GetPizza(recipeType);
-    //};
 }
