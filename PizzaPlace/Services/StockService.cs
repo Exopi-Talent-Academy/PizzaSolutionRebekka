@@ -16,7 +16,6 @@ public class StockService(IStockRepository stockRepository) : IStockService
     public async Task<bool> HasInsufficientStock(PizzaOrder order, ComparableList<PizzaRecipeDto> recipeDtos)
     {
         ComparableList<StockDto> stockNeededForOrder = await GetStock(order, recipeDtos);
-        Dictionary<PizzaRecipeType, int> recipeTypeAmountsInOrder = GetRecipeTypeAmounts(order.RequestedOrder);
 
         foreach (var neededStock in stockNeededForOrder)
         {

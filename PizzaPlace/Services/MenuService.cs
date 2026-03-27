@@ -14,12 +14,10 @@ public class MenuService : IMenuService
         // Give the menu according to what time it is
         if (currentHour >= 11 && currentHour < 14)
         {
-            // Return the lunch menu
             return new Menu("Lunch Menu", GetMenuItems(true));
         }
         else
         {
-            // Return the standard menu
             return new Menu("Standard Menu", GetMenuItems(false));
         }
     }
