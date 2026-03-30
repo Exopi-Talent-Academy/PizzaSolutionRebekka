@@ -10,9 +10,10 @@ builder.Services.AddCors(o =>
     o.AddPolicy("allowAll",
         policy =>
         {
-            policy.WithOrigins(
-            // "whatEver.homepage.com"
-            );
+            policy.SetIsOriginAllowed(origin => true);
+            //policy.WithOrigins(
+            //// "whatEver.homepage.com"
+            //);
             policy.AllowAnyHeader();
             policy.AllowCredentials();
             policy.AllowAnyMethod();
@@ -46,6 +47,7 @@ var app = builder.Build();
 
 app.UseOpenApi();
 app.UseSwaggerUi();
+app.MapControllerRoute("default", pattern: "{controller=Welcome}/{action=Index}");
 
 app.UseCors();
 

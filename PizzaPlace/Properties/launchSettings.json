@@ -2,7 +2,7 @@
   "profiles": {
     "PizzaPlace": {
       "commandName": "Project",
-      "launchUrl": "swagger",
+      "launchUrl": "Welcome",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
@@ -11,7 +11,7 @@
     },
     "WSL": {
       "commandName": "WSL2",
-      "launchUrl": "http://localhost:9009/swagger",
+      "launchUrl": "http://localhost:9009/Welcome",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_URLS": "http://localhost:9009/"
