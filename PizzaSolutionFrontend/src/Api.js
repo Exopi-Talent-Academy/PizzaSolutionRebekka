@@ -28,3 +28,18 @@ export async function getMenu() {
 
     return await response.json();
 }
+
+export async function makeOrder(newOrder) {
+    const response = await fetch(`${BASE_URL}/api/order`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ order: newOrder }),
+    });
+
+    if (!response.ok)
+        throw new Error(`Ordering POST failed: ${response.statusText}`);
+
+    return await response.json();
+}

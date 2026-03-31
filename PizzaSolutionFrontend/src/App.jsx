@@ -5,36 +5,46 @@ import heroImg from './assets/hero.png'
 import './App.css'
 import WelcomePage from './Pages/Welcome'
 import MenuPage from './Pages/Menu'
+import OrderPage from './Pages/Order'
 
 function App() {
-  //const [count, setCount] = useState(0)
   const restaurantName = "Mario's Pizzaria";
-  var currentPage = "welcome";
+  const [currentPage, setCurrentPage] = useState("welcome");
 
   return (
     <>
     <title>{restaurantName}</title>
     <header>
       <h1>{restaurantName}</h1>
-      <button onClick={() => currentPage = "welcome"}>Welcome</button>
-      <button onClick={() => currentPage = "menu"}>Menu</button>
+      <button onClick={() => setCurrentPage("welcome")}>Welcome</button>
+      <button onClick={() => setCurrentPage("menu")}>Menu</button>
+      <button onClick={() => setCurrentPage("order")}>Order</button>
     </header>
-    <body>
+    <div>
       {getPage(currentPage)}
-    </body>
+    </div>
     </>
   )
+}
 
-  function getPage(page) {
+export default App
+
+function getPage(page) {
     switch (page) {
-        case "welcome":
-          currentPage = page;
-          return <WelcomePage></WelcomePage>;
-        case "menu":
-          currentPage = page;
-          return <MenuPage></MenuPage>
-      }
-  }
+      case "welcome":
+        return <WelcomePage></WelcomePage>
+      case "menu":
+        return <MenuPage></MenuPage>
+      case "order":
+        return <OrderPage></OrderPage>
+      case "recipe":
+        return <p>Recipe page coming soon...</p>
+      case "restocking":
+        return <p>Restocking page coming soon...</p>
+      default:
+        return <WelcomePage></WelcomePage>
+    }
+}
 
   // return (
   //   <>
@@ -145,6 +155,3 @@ function App() {
   //     <section id="spacer"></section>
   //   </>
   // )
-}
-
-export default App
