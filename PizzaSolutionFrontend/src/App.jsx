@@ -14,11 +14,13 @@ function App() {
   return (
     <>
     <title>{restaurantName}</title>
-    <header>
+    <header className='navigation'>
       <h1>{restaurantName}</h1>
       <button onClick={() => setCurrentPage("welcome")}>Welcome</button>
       <button onClick={() => setCurrentPage("menu")}>Menu</button>
       <button onClick={() => setCurrentPage("order")}>Order</button>
+      <button onClick={() => setCurrentPage("recipe")}>Recipes</button>
+      <button onClick={() => setCurrentPage("restocking")}>Restock</button>
     </header>
     <div>
       {getPage(currentPage)}

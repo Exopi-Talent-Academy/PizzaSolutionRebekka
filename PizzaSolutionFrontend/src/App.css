@@ -1,3 +1,47 @@
+.navigation {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-h);
+  font-family: "Mario-font";
+
+  h1 {
+    font-size: 60px;
+    margin: 5px;
+  }
+
+  button {
+    font-size: 20px;
+    border-radius: 5px;
+    background: var(--nav-bg);
+    border: 2px solid transparent;
+    transition: border-color 0.3s;
+    display: inline;
+    cursor: pointer;
+    margin-top: 20px;
+
+    &:hover {
+      background: var(--accent);
+      border-color: var(--accent-border);
+    }
+  }
+}
+
+.welcome-message {
+  font-size: 24px;
+  color: red;
+  border-radius: 50%;
+  border: 2px, solid var(--accent-border);
+  background-color: var(--accent);
+  width: 400px;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  margin: 10% auto;
+}
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;

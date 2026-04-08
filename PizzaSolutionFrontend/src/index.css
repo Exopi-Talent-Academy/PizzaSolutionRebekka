@@ -4,9 +4,9 @@
   --bg: #fff;
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
-  --accent: #aa3bff;
+  --accent: gold;
   --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
+  --accent-border: orange;
   --social-bg: rgba(244, 243, 236, 0.5);
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
@@ -29,6 +29,19 @@
     font-size: 16px;
   }
 }
+
+/* Mario font doesn't work :'(
+@font-face {
+  font-family: "Mario-font";
+  src: url('https://www.dafont.com/super-mario-256.font');
+}
+
+@font-face {
+  font-family: "Mario-font";
+  src: url('SuperMario256.ttf') format('truetype');
+  font-weight: bold;
+}
+  */
 
 @media (prefers-color-scheme: dark) {
   :root {

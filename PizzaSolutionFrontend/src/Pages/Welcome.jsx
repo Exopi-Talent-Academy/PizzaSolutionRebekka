@@ -31,8 +31,8 @@ export default function WelcomePage() {
             </div>
         ) : message ? (
             <div className="page">
-                <div className='article-padding'>
-                    <p className='page-title'>{message}</p>
+                <div className="welcome-message">
+                    <p>{message}</p>
                 </div>
             </div>
         ) : (

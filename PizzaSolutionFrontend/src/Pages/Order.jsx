@@ -11,21 +11,17 @@ export default function OrderPage() {
         const pizzaType = document.getElementById("pizzatype").value;
         const pizzaAmount = document.getElementById("pizzaamount").value;
 
-        if (pizzaType && pizzaAmount) {
-            setOrderData(order => order.concat([`"PizzaType": "${pizzaType}", "Amount": "${pizzaAmount}"`])); // change the format to something easy to display
+        if (pizzaType && pizzaAmount && pizzaAmount > 0) {
+            setOrderData(order => order.concat([`PizzaType: ${pizzaType} Pizza, Amount: ${pizzaAmount}`])); // change the format to something easy to display
         }
     }
 
     async function handleSubmit() {
         // Convert the data in OrderData to fit the format the backend expects
-        // So first remove the spacing between the PizzaRecipeType
-        // pizzaType.replace(/ /g, ''); // remove spaces from pizza type to match backend enum values
-        // Then convert into the format the backend expects, which is a list of objects with PizzaRecipeType and Amount as properties
-
         const formattedOrderData = orderData.map(item => {
-            // this code is wrong but close
-            const [pizzaType, amount] = item.split(',').map(part => part.split(':')[1].trim().replace(/"/g, ''));
-            return { PizzaRecipeType: pizzaType, Amount: parseInt(amount) };
+            const [pizzaType, amount] = item.split(',').map(part => part.split(':')[1].trim());
+            pizzaType.replace(/ /g, ''); // remove spaces from pizza type to match backend enum values
+            return { PizzaType: pizzaType, Amount: parseInt(amount) };
         });
 
         try {
