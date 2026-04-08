@@ -2,7 +2,7 @@
   display: flex;
   gap: 12px;
   padding: 16px;
-  background: var(--nav-bg);
+  background: var(--accent-bg);
   border-bottom: 1px solid var(--border);
   color: var(--text-h);
   font-family: "Mario-font";
@@ -10,20 +10,21 @@
   h1 {
     font-size: 60px;
     margin: 5px;
+    padding: 5px;
   }
 
   button {
-    font-size: 20px;
+    font-size: 22px;
     border-radius: 5px;
     background: var(--nav-bg);
     border: 2px solid transparent;
     transition: border-color 0.3s;
     display: inline;
     cursor: pointer;
+    padding: 4px;
     margin-top: 20px;
 
     &:hover {
-      background: var(--accent);
       border-color: var(--accent-border);
     }
   }
@@ -34,12 +35,88 @@
   color: red;
   border-radius: 50%;
   border: 2px, solid var(--accent-border);
-  background-color: var(--accent);
+  background-color: var(--accent-bg);
   width: 400px;
   height: 400px;
   display: flex;
   align-items: center;
   margin: 10% auto;
+}
+
+.menupage {
+  display: flex;
+  flex-direction: column;
+
+  #menu-title {
+    font-size: 32px;
+    margin: 20px 0;
+    font-weight: bold;
+  }
+
+  #menu-display {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+  }
+
+  .menu-card {
+    width: 25%;
+    min-width: min-content;
+    float: left;
+    border: 1px solid var(--border);
+    border-radius: 30px;
+  }
+
+  .pizza-description {
+    width: 100%;
+    text-align: center;
+    padding: 8px;
+    font-size: medium;
+    color: black;
+
+    th {
+      padding-bottom: 0%;
+      font-size: x-large;
+      color: darkred;
+    }
+
+    #pizza-type {
+      padding-top: 0%;
+      padding-bottom: 10%;
+    }
+
+    .order-or-sold-out {
+      border-radius: 10px;
+      border: 2px solid transparent;
+      display: inline;
+      float: right;
+      margin: 0px 5% 0px 0px;
+      
+      button {
+        border-radius: 10px;
+        background: lightgreen;
+        border: 2px solid transparent;
+        transition: border-color 0.3s;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: large;
+        padding: 7px 14px;
+
+        &:hover {
+          border-color: var(--accent-border);
+        }
+      }
+
+      #sold-out {
+        color: red;
+        font-size: large;
+        padding: 7px 14px;
+      }
+    }
+  }
 }
 
 .counter {

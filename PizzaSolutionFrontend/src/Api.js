@@ -21,7 +21,7 @@ export async function getMenu() {
         headers: {
             'Content-Type': 'application/json',
         },
-    }); //should give it the current time since GetMenu needs that
+    });
 
     if (!response.ok)
         throw new Error(`Menu GET failed: ${response.statusText}`);

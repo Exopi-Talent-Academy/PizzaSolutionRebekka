@@ -32,7 +32,7 @@ public class MenuService : IMenuService
         list.Add(new MenuItem("Mario Pizza", Models.Types.PizzaRecipeType.StandardPizza, 9.99));
         list.Add(new MenuItem("Luigi Pizza", Models.Types.PizzaRecipeType.StandardPizza, 9.99));
         list.Add(new MenuItem("Wario Pizza", Models.Types.PizzaRecipeType.OddPizza, 8.99));
-        list.Add(new MenuItem("Waluigi Pizza", Models.Types.PizzaRecipeType.OddPizza, 10.99));
+        list.Add(new MenuItem("Waluigi Pizza", Models.Types.PizzaRecipeType.OddPizza, 10.99, true));
         list.Add(new MenuItem("Peach Pizza", Models.Types.PizzaRecipeType.ExtremelyTastyPizza, 12.99));
         list.Add(new MenuItem("Daisy Pizza", Models.Types.PizzaRecipeType.ExtremelyTastyPizza, 12.99));
         list.Add(new MenuItem("Yoshi Pizza", Models.Types.PizzaRecipeType.ExtremelyTastyPizza, 12.99));

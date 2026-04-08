@@ -12,7 +12,7 @@ export default function OrderPage() {
         const pizzaAmount = document.getElementById("pizzaamount").value;
 
         if (pizzaType && pizzaAmount && pizzaAmount > 0) {
-            setOrderData(order => order.concat([`PizzaType: ${pizzaType} Pizza, Amount: ${pizzaAmount}`])); // change the format to something easy to display
+            setOrderData(order => order.push(`PizzaType: ${pizzaType} Pizza, Amount: ${pizzaAmount}`)); // change the format to something easy to display
         }
     }
 
