@@ -1,16 +1,24 @@
-# React + Vite
+# Pizza Solution Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is for the frontend part of Pizza Solution.
 
-Currently, two official plugins are available:
+## Running the frontend
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Go through these steps:
 
-## React Compiler
+1. The backend has to be running. Open "PizzaSolution.sln" in Visual Studio and click on the run button that is labeled "PizzaPlace". This should open a terminal.
+2. Within a terminal, navigate into the "PizzaSolutionFrontend"-folder.
+3. Write "npm run dev" into the terminal and it should start running.
+4. Open a Windows Powershell as administrator.
+5. Enter this command "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --user-data-dir=C:\msedge-dev-data\ --disable-web-security
+6. Go into your "Downloads"-folder in a file explorer and open the Microsoft Edge it has made in there.
+7. Go to "http://localhost:5173/"-website. The frontend should be there, free to explore!
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Notes
 
-## Expanding the ESLint configuration
+* This is very cursed. Very not ideal. Do not recommend doing it on an important device.
+* If steps 4-6 are not done, the Order-page can still be viewed. And technically also Recipe and Restocking, since they haven't been implemented.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Dependencies
+
+* Node.js has to be installed in order to run the frontend.

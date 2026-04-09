@@ -77,7 +77,7 @@ function displayPizza(pizza) {
         splitstring = pizza.split(',').map(part => part.split(':')[1].trim());
         pizzaType = splitstring[1].replace(/([a-z])([A-Z])/g, '$1 $2'); // Add space before capital letters for better display
     } else {
-        // Needs to not throw an error and stop because it needs a few tries
+        // Needs to not throw an error and stop because it needs a few tries // not sure that's true anymore
         console.log("Pizza data is not a string");
     }
 
