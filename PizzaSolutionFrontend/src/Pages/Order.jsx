@@ -17,25 +17,29 @@ export default function OrderPage() {
     }
 
     async function handleSubmit() {
-        // Convert the data in OrderData to fit the format the backend expects
-        const formattedOrderData = orderData.map(item => {
-            const [pizzaType, amount] = item.split(',').map(part => part.split(':')[1].trim());
-            pizzaType.replace(/ /g, ''); // remove spaces from pizza type to match backend enum values
-            return { PizzaType: pizzaType, Amount: parseInt(amount) };
-        });
+        if (orderData == []) {
+            // do nothing
+        } else {
+            // Convert the data in OrderData to fit the format the backend expects
+            const formattedOrderData = orderData.map(item => {
+                const [pizzaType, amount] = item.split(',').map(part => part.split(':')[1].trim());
+                pizzaType.replace(/ /g, ''); // remove spaces from pizza type to match backend enum values
+                return { PizzaType: pizzaType, Amount: parseInt(amount) };
+            });
 
-        try {
-            const data = await makeOrder(formattedOrderData)
-            setMessage(typeof data === 'string' ? data : JSON.stringify(data))
-            setError('')
-            setSubmitOrder(true)
+            try {
+                const data = await makeOrder(formattedOrderData)
+                setMessage(typeof data === 'string' ? data : JSON.stringify(data))
+                setError('')
+                setSubmitOrder(true)
 
-            // Print what has been ordered to the user, asking them to wait?
-        } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
-            setError(errorMessage)
-            setMessage('')
-        }
+                // Print what has been ordered to the user, asking them to wait?
+            } catch (err) {
+                const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
+                setError(errorMessage)
+                setMessage('')
+            }
+        }   
     }
 
     return (<>
@@ -47,35 +51,51 @@ export default function OrderPage() {
                 </div>
             </div>
         ) : submitOrder == false ? (
-            <div className="page">
+            <div className="orderpage">
                 <h2>Order</h2>
-                <p>Here you can place your order.</p>
-                <div>
-                    <label htmlFor="pizzatype">Pizza Type:</label>
-                    <input list="pizzaTypes" required={true} id="pizzatype" />
-                    <datalist id="pizzaTypes">
-                        <option value="Standard"></option>
-                        <option value="Extremely Tasty"></option>
-                        <option value="Odd"></option>
-                        <option value="Rare"></option>
-                        <option value="Horse Radish"></option>
-                        <option value="Child"></option>
-                    </datalist>
-                    <br />
-                    <label htmlFor="pizzaamount">Amount:</label>
-                    <input type="number" min="1" required={true} id="pizzaamount" />
-                    <br />
-                    <button type="submit" onClick={addPizzaToOrder}>Add to Order</button>
+                <div className="full-orderpage-display">
+                    <table id="add-pizzas">
+                        <tr>
+                            <th className="pizza-descriptors">
+                                <label htmlFor="pizzatype">Pizza Type</label>
+                            </th>
+                            <td className="pizza-input">
+                                <input list="pizzaTypes" required={true} id="pizzatype" />
+                                <datalist id="pizzaTypes">
+                                    <option value="Standard"></option>
+                                    <option value="Extremely Tasty"></option>
+                                    <option value="Odd"></option>
+                                    <option value="Rare"></option>
+                                    <option value="Horse Radish"></option>
+                                    <option value="Child"></option>
+                                </datalist>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label htmlFor="pizzaamount">Amount</label>
+                            </th>
+                            <td className="pizza-input">
+                                <input type="number" min="1" required={true} id="pizzaamount" />
+                            </td>
+                        <br />
+                        </tr>
+                        <tr>
+                            <td className="submit" colSpan={2}>
+                                <button type="submit" onClick={addPizzaToOrder}>Add to Order</button>
+                            </td>
+                        </tr>
+                    </table>
+                    <div id="orderlist">
+                        <h3>Current Order</h3>
+                        <ul>
+                            {orderData.map((item, index) => (
+                                <li key={index}>{item}</li>
+                            ))}
+                        </ul>
+                        <button type="submit" name="submitOrder" onClick={handleSubmit}>Place Order</button>
+                    </div>
                 </div>
-                <div>
-                    <h3>Current Order:</h3>
-                    <ul>
-                        {orderData.map((item, index) => (
-                            <li key={index}>{item}</li>
-                        ))}
-                    </ul>
-                </div>
-                <button type="submit" name="submitOrder" onClick={handleSubmit}>Place Order</button>
             </div>
         ) : (
             <>

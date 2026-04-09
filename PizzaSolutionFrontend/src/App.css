@@ -118,3 +118,67 @@
     }
   }
 }
+
+.orderpage {
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    font-size: 32px;
+    margin: 20px 0;
+    font-weight: bold;
+    color: var(--accent)
+  }
+
+  .full-orderpage-display {
+    width: 100%;
+
+    input {
+      width: max-content;
+      font-size: x-large;
+      border-width: 1px;
+      border-radius: 5px;
+      border-color: var(--accent);
+    }
+
+    #add-pizzas {
+      width: 75%;
+      float: left;
+      display: table-column;
+      justify-content: center;
+
+      tr {
+        height: min-content;
+      }
+
+      th {
+        text-align: right;
+        width: 50%;
+        font-size: x-large;
+      }
+
+      .pizza-input {
+        text-align: left;
+        width: 50%;
+      }
+
+      .submit {
+        align-items: center;
+      }
+
+      button {
+        margin-top: 25px;
+        font-size: x-large;
+      }
+    }
+
+    #orderlist {
+      width: 25%;
+      float: right;
+
+      h3 {
+        color: black;
+      }
+    }
+  }
+}

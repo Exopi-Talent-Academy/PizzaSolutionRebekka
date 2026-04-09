@@ -17,7 +17,7 @@ Go through these steps:
 ### Notes
 
 * This is very cursed. Very not ideal. Do not recommend doing it on an important device.
-* If steps 4-6 are not done, the Order-page can still be viewed. And technically also Recipe and Restocking, since they haven't been implemented.
+* If steps 4-6 are not done, the Order-page can still be viewed (but not used), though it is unfinished. And technically also Recipe and Restocking, since they haven't been made at all.
 
 ### Dependencies
 
