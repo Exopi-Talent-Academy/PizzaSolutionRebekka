@@ -127,39 +127,39 @@
     font-size: 32px;
     margin: 20px 0;
     font-weight: bold;
-    color: var(--accent)
+    color: black;
   }
 
   .full-orderpage-display {
     width: 100%;
 
-    input {
-      width: max-content;
-      font-size: x-large;
-      border-width: 1px;
-      border-radius: 5px;
-      border-color: var(--accent);
-    }
-
-    #add-pizzas {
+    .add-pizzas {
       width: 75%;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      font-size: x-large;
       float: left;
-      display: table-column;
-      justify-content: center;
-
-      tr {
-        height: min-content;
-      }
-
-      th {
+      clear: none;
+    
+      label {
         text-align: right;
+        float: right;
         width: 50%;
-        font-size: x-large;
+        font-weight: bold;
+        color: var(--accent);
+        padding-right: 10px;
+        margin-bottom: 5px;
       }
 
-      .pizza-input {
-        text-align: left;
-        width: 50%;
+      input {
+        width: max-content;
+        float: left;
+        font-size: x-large;
+        border-width: 1px;
+        border-radius: 5px;
+        border-color: var(--accent);
+        margin-bottom: 5px;
       }
 
       .submit {
@@ -177,7 +177,7 @@
       float: right;
 
       h3 {
-        color: black;
+        color: var(--accent);
       }
     }
   }

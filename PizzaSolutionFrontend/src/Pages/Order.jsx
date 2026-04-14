@@ -5,13 +5,17 @@ export default function OrderPage() {
     const [message, setMessage] = useState('')
     const [error, setError] = useState('')
     const [orderData, setOrderData] = useState([])
-    const [submitOrder, setSubmitOrder] = useState(false)
+    const [orderSubmitted, setOrderSubmitted] = useState(false)
 
     async function addPizzaToOrder() {
         const pizzaType = document.getElementById("pizzatype").value;
         const pizzaAmount = document.getElementById("pizzaamount").value;
+        console.log(pizzaType, pizzaAmount);
+        //var validatePizzaType = document.querySelector("#pizzatype option[value='" + pizzaType + "']");
+        //var validatePizzaType = ("#pizzatype").find("option[value='" + pizzaType + "']");
+        var validatePizzaType = document.getElementById("pizzatype").querySelector("option[value='" + pizzaType + "']");
 
-        if (pizzaType && pizzaAmount && pizzaAmount > 0) {
+        if (pizzaType && pizzaAmount && pizzaAmount > 0 && validatePizzaType) {
             setOrderData(order => order.push(`PizzaType: ${pizzaType} Pizza, Amount: ${pizzaAmount}`)); // change the format to something easy to display
         }
     }
@@ -31,7 +35,7 @@ export default function OrderPage() {
                 const data = await makeOrder(formattedOrderData)
                 setMessage(typeof data === 'string' ? data : JSON.stringify(data))
                 setError('')
-                setSubmitOrder(true)
+                setOrderSubmitted(true)
 
                 // Print what has been ordered to the user, asking them to wait?
             } catch (err) {
@@ -50,42 +54,33 @@ export default function OrderPage() {
                     <p>{error}</p>
                 </div>
             </div>
-        ) : submitOrder == false ? (
+        ) : orderSubmitted == false ? (
             <div className="orderpage">
                 <h2>Order</h2>
                 <div className="full-orderpage-display">
-                    <table id="add-pizzas">
-                        <tr>
-                            <th className="pizza-descriptors">
-                                <label htmlFor="pizzatype">Pizza Type</label>
-                            </th>
-                            <td className="pizza-input">
-                                <input list="pizzaTypes" required={true} id="pizzatype" />
-                                <datalist id="pizzaTypes">
-                                    <option value="Standard"></option>
-                                    <option value="Extremely Tasty"></option>
-                                    <option value="Odd"></option>
-                                    <option value="Rare"></option>
-                                    <option value="Horse Radish"></option>
-                                    <option value="Child"></option>
-                                </datalist>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label htmlFor="pizzaamount">Amount</label>
-                            </th>
-                            <td className="pizza-input">
-                                <input type="number" min="1" required={true} id="pizzaamount" />
-                            </td>
-                        <br />
-                        </tr>
-                        <tr>
-                            <td className="submit" colSpan={2}>
-                                <button type="submit" onClick={addPizzaToOrder}>Add to Order</button>
-                            </td>
-                        </tr>
-                    </table>
+                    <form className="add-pizzas" onSubmit={(e) => e.preventDefault()}>
+                        <div style={{ float: "left", width: "50%" }}>
+                            <label htmlFor="pizzatype">Pizza Type</label>
+                            <br />
+                            <label htmlFor="pizzaamount">Amount</label>
+                        </div>
+                        <div style={{ float: "right", width: "50%" }}>
+                            <input type="text" list="pizzaTypes" required={true} id="pizzatype" />
+                            <datalist id="pizzaTypes">
+                                <option value="Standard"></option>
+                                <option value="Extremely Tasty"></option>
+                                <option value="Odd"></option>
+                                <option value="Rare"></option>
+                                <option value="Horse Radish"></option>
+                                <option value="Child"></option>
+                            </datalist>
+                            <br />
+                            <input type="number" min="1" required={true} id="pizzaamount" />
+                        </div>
+                        <div style={{ width: "100%" }}>
+                            <button type="submit" onSubmit={addPizzaToOrder}>Add to Order</button>
+                        </div>
+                    </form>
                     <div id="orderlist">
                         <h3>Current Order</h3>
                         <ul>
@@ -93,7 +88,7 @@ export default function OrderPage() {
                                 <li key={index}>{item}</li>
                             ))}
                         </ul>
-                        <button type="submit" name="submitOrder" onClick={handleSubmit}>Place Order</button>
+                        <button type="submit" name="orderSubmitted" onClick={handleSubmit}>Place Order</button>
                     </div>
                 </div>
             </div>
